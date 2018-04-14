@@ -1,20 +1,20 @@
 package com.example.android.mygarden.utils;
 
 /*
-* Copyright (C) 2017 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*  	http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -26,23 +26,13 @@ public class PlantUtils {
 
     private static final long MINUTE_MILLISECONDS = 1000 * 60;
     private static final long HOUR_MILLISECONDS = MINUTE_MILLISECONDS * 60;
-    private static final long DAY_MILLISECONDS = HOUR_MILLISECONDS * 24;
-
     public static final long MIN_AGE_BETWEEN_WATER = HOUR_MILLISECONDS * 2; // can water every 2 hours
     static final long DANGER_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 6; // in danger after 6 hours
     public static final long MAX_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 12; // plants die after 12 hours
+    private static final long DAY_MILLISECONDS = HOUR_MILLISECONDS * 24;
     static final long TINY_AGE = DAY_MILLISECONDS * 0; // plants start tiny
     static final long JUVENILE_AGE = DAY_MILLISECONDS * 1; // 1 day old
     static final long FULLY_GROWN_AGE = DAY_MILLISECONDS * 2; // 2 days old
-
-
-    public enum PlantStatus {ALIVE, DYING, DEAD}
-
-    ;
-
-    public enum PlantSize {TINY, JUVENILE, FULLY_GROWN}
-
-    ;
 
     /**
      * Returns the corresponding image resource of the plant given the plant's age and
@@ -55,8 +45,11 @@ public class PlantUtils {
     public static int getPlantImageRes(Context context, long plantAge, long waterAge, int type) {
         //check if plant is dead first
         PlantStatus status = PlantStatus.ALIVE;
-        if (waterAge > MAX_AGE_WITHOUT_WATER) status = PlantStatus.DEAD;
-        else if (waterAge > DANGER_AGE_WITHOUT_WATER) status = PlantStatus.DYING;
+        if (waterAge > MAX_AGE_WITHOUT_WATER) {
+            status = PlantStatus.DEAD;
+        } else if (waterAge > DANGER_AGE_WITHOUT_WATER) {
+            status = PlantStatus.DYING;
+        }
 
         //Update image if old enough
         if (plantAge > FULLY_GROWN_AGE) {
@@ -84,11 +77,18 @@ public class PlantUtils {
         Resources res = context.getResources();
         TypedArray plantTypes = res.obtainTypedArray(R.array.plant_types);
         String resName = plantTypes.getString(type);
-        if (status == PlantStatus.DYING) resName += "_danger";
-        else if (status == PlantStatus.DEAD) resName += "_dead";
-        if (size == PlantSize.TINY) resName += "_1";
-        else if (size == PlantSize.JUVENILE) resName += "_2";
-        else if (size == PlantSize.FULLY_GROWN) resName += "_3";
+        if (status == PlantStatus.DYING) {
+            resName += "_danger";
+        } else if (status == PlantStatus.DEAD) {
+            resName += "_dead";
+        }
+        if (size == PlantSize.TINY) {
+            resName += "_1";
+        } else if (size == PlantSize.JUVENILE) {
+            resName += "_2";
+        } else if (size == PlantSize.FULLY_GROWN) {
+            resName += "_3";
+        }
         return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
     }
 
@@ -119,9 +119,13 @@ public class PlantUtils {
      */
     public static int getDisplayAgeInt(long milliSeconds) {
         int days = (int) (milliSeconds / DAY_MILLISECONDS);
-        if (days >= 1) return days;
+        if (days >= 1) {
+            return days;
+        }
         int hours = (int) (milliSeconds / HOUR_MILLISECONDS);
-        if (hours >= 1) return hours;
+        if (hours >= 1) {
+            return hours;
+        }
         return (int) (milliSeconds / MINUTE_MILLISECONDS);
     }
 
@@ -134,9 +138,17 @@ public class PlantUtils {
      */
     public static String getDisplayAgeUnit(Context context, long milliSeconds) {
         int days = (int) (milliSeconds / DAY_MILLISECONDS);
-        if (days >= 1) return context.getString(R.string.days);
+        if (days >= 1) {
+            return context.getString(R.string.days);
+        }
         int hours = (int) (milliSeconds / HOUR_MILLISECONDS);
-        if (hours >= 1) return context.getString(R.string.hours);
+        if (hours >= 1) {
+            return context.getString(R.string.hours);
+        }
         return context.getString(R.string.minutes);
     }
+
+    public enum PlantStatus {ALIVE, DYING, DEAD}
+
+    public enum PlantSize {TINY, JUVENILE, FULLY_GROWN}
 }
